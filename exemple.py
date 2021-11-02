@@ -6,7 +6,7 @@
 # un handler renvoie vers la fonction apropriée
 
 
-from archi import Menu, Form
+from flamewok.views import Menu, Form
 
 
 def handler(response):
@@ -17,56 +17,55 @@ def handler(response):
         # dans un vrai programme, chaque clé renvoie un nom de
         # fonction exemple:
         # "go_fonction_truc" : fonction_truc,
-        "go_retour": "retour",
-        "go_choix1": "action1",
-        "go_choix2": "action2",
+        "go_back": "back",
+        "go_choice1": "action1",
+        "go_choice2": "action2",
         "go_yes": "yes !",
         "go_no": "no !",
-        "copy": "do copy...",
-        "exit": "do exit",
-        "modif_foo": "do modif",
-        "save": "do save"
-
+        "go_copy": "do copy...",
+        "go_exit": "do exit",
+        "go_modify": "do modif",
+        "go_save": "do save",
     }
     print(actions[response[0]])
     # dans un vra programme on fera plutôt:
     # action[response[0]](response[1:])
     for arg in response[1:]:
-        print("parametres : ")
+        print("parameters : ")
         print(actions[arg])
 
 
 menu1 = [
     "\nMon menu\n",
-    (0, "retour", "go_retour"),
-    (1, "choix 1", "go_choix1"),
+    (0, "back", "go_back"),
+    (1, "choix 1", "go_choice1"),
     "\n autre:\n",
-    (2, "choix 2", "go_choix2"),
-    (3, "choix 1 et 2", "go_choix1", "go_choix2")
+    (2, "choix 2", "go_choice2"),
+    (3, "choix 1 et 2", "go_choice1", "go_choice2")
 ]
 
 menu2 = [
-    (0, "retour", "go_retour"),
+    (0, "retour", "go_back"),
     (1, "yes", "go_yes"),
     (2, "no", "go_no"),
-    ("c", "copy", "copy"),
-    ("x", "exit", "exit"),
-    ("modif", "modifier", "modif_foo"),
+    ("c", "copy", "go_copy"),
+    ("x", "exit", "go_exit"),
+    ("modif", "modify", "go_modify"),
 ]
 
 
 form = Form(
     [
-        ("name", "Nom"),
-        ("age", "Age"),
-        ("size", "taille"),
+        ("name", "Name of the caracter"),
+        ("age", "Age of the caracter"),
+        ("size", "size of the caracter"),
     ]
 )
 
 
 if __name__ == "__main__":
     print("exemple d'utilisation de la classe Menu")
-    # handler(Menu(menu1).response)
+    handler(Menu(menu1).response)
     handler(Menu(menu2, box_size=20).response)
     res = form.ask()
     res2 = form.ask()
