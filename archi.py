@@ -17,35 +17,36 @@ class Menu:
             ):
         """La liste doit contenir:
         - des tuples construits ainsi:
-        un élément à taper,
-        une descrition de l'action
+        un élément à taper pour faire son choix,
+        une descrition de l'action,
         un ou plusieurs signaux renvoyés
         - des str à inserer (ex: "\n")
         """
         self.prompt = prompt
-        self.affichage = ""
+        self.body = ""
         self.action = {}
         self.response = None
 
+        # manage the number of dialog boxes per line
+        box_number = line_length // box_size
         for el in liste:
-            box_number = 0
             if type(el) == str:
-                self.affichage += el
+                self.body += el
             else:
-                if box_number >= line_length // box_size:
-                    self.affichage += "\n"
-                    box_number = 0
-                else:
-                    box_number += 1
-                    box = ""
-                    box += f"{el[0]} : {el[1]}"
-                    self.action[str(el[0])] = el[2:]
-                    self.affichage += f"{box[:box_size]:<{box_size}}{sep}"
+                if box_number == 0:
+                    self.body += "\n"
+                    box_number = line_length // box_size
 
-        self.affiche()
+                box_number -= 1
+                box = ""
+                box += f"{el[0]} : {el[1]}"
+                self.action[str(el[0])] = el[2:]
+                self.body += f"{box[:box_size]:<{box_size}}{sep}"
 
-    def affiche(self):
-        print(self.affichage)
+        self.show()
+
+    def show(self):
+        print(self.body)
         self.input()
 
     def input(self):
@@ -54,13 +55,13 @@ class Menu:
             self.response = self.action[choice]
             self.send_response()
         else:
-            self.affiche()
+            self.show()
 
     def send_response(self):
         if self.response:
             return self.response
         else:
-            self.affiche()
+            self.show()
             self.input()
 
 
@@ -77,15 +78,17 @@ class Response:
 
 class Form:
     """Fournir une liste de tuples de 2 éléments:
-    - str(question à afficher)
     - str(clé d'enregistrment de la réponse)
+    - str(question à afficher)
     """
     def __init__(self, liste, prompt="> "):
-        self.response = Response()
-        for el in liste:
-            print(f"{el[0]}")
-            value = input(prompt)
-            self.response.__setattr__(el[1], value)
+        self.prompt = prompt
+        self.liste = liste
 
-    def get(self):
-        return self.response
+    def ask(self):
+        response = Response()
+        for el in self.liste:
+            print(f"{el[1]}")
+            value = input(self.prompt)
+            response.__setattr__(el[0], value)
+        return response

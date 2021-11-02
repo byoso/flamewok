@@ -35,7 +35,6 @@ def handler(response):
         print("parametres : ")
         print(actions[arg])
 
-print("exemple d'utilisation de la classe Menu")
 
 menu1 = [
     "\nMon menu\n",
@@ -55,15 +54,21 @@ menu2 = [
     ("modif", "modifier", "modif_foo"),
 ]
 
-# handler(Menu(menu1).response)
-handler(Menu(menu2, box_size=20).response)
 
 form = Form(
     [
-        ("Nom", "name"),
-        ("Age", "age"),
-        ("taille", "size"),
+        ("name", "Nom"),
+        ("age", "Age"),
+        ("size", "taille"),
     ]
-).get()
+)
 
-print(f"age : {form.age}, taille : {form.size}, age: {form.age}")
+
+if __name__ == "__main__":
+    print("exemple d'utilisation de la classe Menu")
+    # handler(Menu(menu1).response)
+    handler(Menu(menu2, box_size=20).response)
+    res = form.ask()
+    res2 = form.ask()
+    print(f"Nom : {res.name}, taille : {res.size}, age: {res.age}")
+    print(f"Nom : {res2.name}, taille : {res2.size}, age: {res2.age}")
