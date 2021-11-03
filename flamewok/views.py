@@ -15,7 +15,8 @@ class Menu:
         self, boxes, sep=" | ",
         box_size=20,
         line_length=80,
-        prompt="?> "
+        prompt="?> ",
+        error_message="\n!! Wrong entry, you must enter a valid choice !!",
             ):
         """boxes is a list of tuples of strings built like this:
         - the tuples (will be the dialog boxes) have 3 or more elements:
@@ -28,6 +29,7 @@ class Menu:
         self.body = ""
         self.actions = {}
         self.response = None
+        self.error_message = error_message
 
         # manage the number of dialog boxes per line
         box_number = line_length // box_size
@@ -57,6 +59,7 @@ class Menu:
             self.response = self.actions[choice]
             return self.send_response()
         else:
+            print(self.error_message)
             return self.ask()
 
     def send_response(self):

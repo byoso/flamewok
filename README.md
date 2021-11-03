@@ -6,12 +6,12 @@ ONLY in terminal.
 It is still a work in progress:
 
 Done:
-    - Form class
-    - Menu class
+    Form class
+    Menu class
+    Handler class
 
 
 TODO:
-    - Handler class (to handle the signals emmited from menus in a 
-    convenient way)
-    - integrate a small DB working with json (tinyDB maybe ?, or else)
+    menucall decorator (will work with Handler)
+    integrate a small DB working with json (tinyDB maybe ?, or else)
 

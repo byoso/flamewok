@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#! /usr/bin/python3 -i
 # coding: utf-8
 
 
@@ -17,8 +17,8 @@ menu = Menu([
     (3, "strong", "go_strong"),
     (4, "funny", "go_funny"),
     ("combo", "a combo of 3 signals", "go_combo", "go_pretty", "go_best"),
-    ("stop", "enought of that !", "go_end"),
-], box_size=30, line_length=90, prompt="your choice > ")
+    ("x", "exit", "go_end"),
+])
 # those last 3 are optionnal, try to change them to see what it does
 
 
