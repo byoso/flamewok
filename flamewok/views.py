@@ -1,16 +1,8 @@
 
-"""The views module contains the elements concerning the views.
-You should import in your main program:
-
-Menu
-Form
-
-"""
-
-
 class Menu:
     """Menu builds the menu display, and emmits a signal depending on
     the answer."""
+    menus = []
     def __init__(
         self, boxes, sep=" | ",
         box_size=20,
@@ -47,7 +39,8 @@ class Menu:
                 # set actions from the 'boxes' argument
                 self.actions[str(el[0])] = el[2:]
                 self.body += f"{box[:box_size]:<{box_size}}{sep}"
-        # self.ask()
+        # add menu to Menu.menus
+        self.menus.append(self)
 
     def ask(self):
         print(self.body)
@@ -67,6 +60,9 @@ class Menu:
 
     def __str__(self):
         return f"<Menu | {len(self.actions)} choices>"
+
+    def __repr__(self):
+        return str(self)
 
 
 class Response:

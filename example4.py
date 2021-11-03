@@ -19,7 +19,6 @@ menu = Menu([
     ("combo", "a combo of 3 signals", "go_combo", "go_pretty", "go_best"),
     ("x", "exit", "go_end"),
 ])
-# those last 3 are optionnal, try to change them to see what it does
 
 
 class Facade:
