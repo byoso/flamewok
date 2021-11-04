@@ -9,9 +9,9 @@ the code clean.
 
 Fully functionnal now. Works great !
 
-you want to create forms ?.
-from flamewok import Form.
-you want to create menus ?.
+Create forms : 
+from flamewok import Form
+Create menus : 
 from flamewok import Menu.
 
 yes, that simple.
