@@ -1,7 +1,6 @@
 
 from uuid import uuid4
 
-from .controllers import Handler
 from flamewok import settings
 
 
@@ -34,12 +33,11 @@ class Menu:
 
     def __init__(
         self,
-        sep=" | ",
+        sep=settings.DEFAULT_SEP,
         box_size=settings.DEFAULT_BOX_SIZE,
         line_length=settings.DEFAULT_LINE_LENGTH,
         prompt=settings.DEFAULT_MENU_PROMPT,
         error_message=settings.DEFAULT_MENU_ERROR,
-        handler=None,
             ):
         """boxes is a list of tuples of strings built like this:
         - the tuples (will be the dialog boxes) have 3 or more elements:
@@ -58,22 +56,16 @@ class Menu:
         self.error_message = error_message
         self.boxes = []
         self.body = ""
-        if handler:
-            self.handler = handler
-        else:
-            self.handler = Handler()
 
     def build(self):
         # manage the number of dialog boxes per line
         self.body = ""
         self.actions = {}
-        self.handler.actions = {}
         box_number = self.line_length // self.box_size
         for el in self.boxes:
             if isinstance(el, TextBox):
                 self.body += el.label
                 self.actions[el.label.strip()] = el.signal
-                self.handler.actions[el.signal] = None
             else:
                 if box_number == 0:
                     self.body += "\n"
@@ -82,8 +74,7 @@ class Menu:
                 box = ""
                 box += f"{el.choice} : {el.label}"
                 # set actions from the 'boxes' argument
-                self.actions[str(el.choice)] = el.signal
-                self.handler.actions[el.signal] = el.func
+                self.actions[str(el.choice)] = el.func
                 self.body += (
                     f"{box[:self.box_size]:<{self.box_size}}{self.sep}")
 
@@ -94,14 +85,14 @@ class Menu:
     def input(self):
         choice = input(self.prompt)
         if choice in self.actions:
-            self.response = self.actions[choice]
-            return self.send_response()
+            self.response = choice
+            self.go_callback(choice)
         else:
             print(self.error_message)
             return self.ask()
 
-    def send_response(self):
-        return self.handler.handle(self.response)
+    def go_callback(self, choice):
+        return self.actions[choice]()
 
     def __str__(self):
         return f"<Menu | {len(self.actions)} choices>"
@@ -118,14 +109,12 @@ class Menu:
             signal = str(uuid4())
             if isinstance(box, type(str())):
                 new_box = TextBox(box, signal)
-                self.handler.connect([(new_box.signal, None), ])
                 self.boxes.append(new_box)
             else:
                 choice = box[0]
                 label = box[1]
                 func = box[2]
                 new_box = Box(choice, label, signal, func)
-                self.handler.connect([(new_box.signal, func), ])
                 self.boxes.append(new_box)
         self.build()
 
