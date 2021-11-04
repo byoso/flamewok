@@ -1,25 +1,35 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-"""Form example
-Here we will build a single form, and use it multiple times"""
+from flamewok import Menu
 
 
-from flamewok.views import Form
+"""This is the simpliest example of what can be done with flamewok"""
 
 
-form = Form([
-    ("name", "Enter your name"),
-    ("size", "Enter your size"),
-    ("age", "Enter you age")
+menu = Menu()
+
+
+def hello():
+    print("Hi there ! here is the callback hello !")
+    menu.ask()
+
+
+def how():
+    print("I'm quite fine, thank you :)")
+    menu.ask()
+
+
+def exit():
+    print("Good Bye folks !")
+    quit()
+
+
+menu.add_boxes([
+    "\nChoose an option:\n",
+    (1, "hello !", hello),
+    (2, "how are you ?", how),
+    ("x", "exit", exit),
 ])
 
-print("Player 1")
-player1 = form.ask()
-print("Player 2")
-player2 = form.ask()
-
-print(
-    f"{player1.name}, aged {player1.age}, height: {player1.size} Vs "
-    f"{player2.name}, aged {player2.age}, height: {player2.size}"
-    )
+menu.ask()
