@@ -2,6 +2,7 @@
 
 # Menu default settings
 
+DEFAULT_INSIDE_SEP = ": "
 DEFAULT_SEP = " | "
 DEFAULT_BOX_SIZE = 20
 DEFAULT_LINE_LENGTH = 80

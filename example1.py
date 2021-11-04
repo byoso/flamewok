@@ -4,7 +4,7 @@
 from flamewok import Menu
 
 
-"""This is the simpliest example of what can be done with flamewok"""
+"""This is the simpliest example of what can be done with flamewok.Menu"""
 
 
 menu = Menu()
