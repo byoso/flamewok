@@ -16,3 +16,7 @@ check the exemples to get an idea.
 
 TODO next:
     - insert/remove menu elements
+
+
+flamewok is available here:
+https://github.com/byoso/flamewok
