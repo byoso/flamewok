@@ -6,7 +6,7 @@ from flamewok import settings
 
 
 class Box(ABC):
-    """Box classes must herit from this"""
+    """Box classes must inherit from this"""
     def __init__(self, label=""):
         self.label = label
         self.id = str(uuid4())
@@ -19,7 +19,7 @@ class Box(ABC):
 
 
 class ActionBox(Box):
-    """A box is an activable element of the menu"""
+    """An ActionBox is an activable element of the menu"""
     choices = []
 
     def __init__(self, choice="", label="", func=None):
@@ -32,8 +32,8 @@ class ActionBox(Box):
 
 
 class TextBox(Box):
-    """A TextBox in a non activable element of the menu, in fact, strings.
-    but it has to have a id, used also as an id"""
+    """A TextBox in a non-activable element of the menu, in fact, strings.
+    """
     def __init__(self, label):
         super().__init__(label)
 
@@ -42,7 +42,7 @@ class TextBox(Box):
 
 
 class Menu:
-    """A menu in shelled in a Menu class"""
+    """Central class of the menu system"""
 
     def __init__(
         self,
@@ -119,7 +119,7 @@ class Menu:
         return choices
 
     def _go_callback(self, choice):
-        """Call the box associated function"""
+        """Calls the box's associated function"""
         box = self.get_action_box(choice)
         return box.func()
 
@@ -141,9 +141,9 @@ class Menu:
         return box
 
     def add_boxes(self, boxes):
-        """boxes must be:
+        """boxes here are :
         - a list of tuple(s):
-        (choice, label, function)
+        [(choice, label, function), ...]
         - or a string"""
         for box in boxes:
             self.add_box(box)
@@ -152,7 +152,7 @@ class Menu:
         """create and add a box from:
         - a tuple:
         (choice, label, function)
-        - a strin"""
+        - a string"""
         if isinstance(box, type(str())):
             new_box = TextBox(box)
             self.boxes.append(new_box)
