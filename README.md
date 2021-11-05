@@ -14,13 +14,39 @@ Fully functionnal now. Works great !
 ```python
 from flamewok import Form
 
-my_form = Form()
+my_form = Form([
+    ("name", "what is your name ?"),
+    ("age", "how old are you ?"),
+    ])
 ```
 ## Create menus : 
 ```python
 from flamewok import Menu
 
-my_menu = Menu()
+menu = Menu()
+
+def hello():
+    print("Hi there ! here is the callback hello !")
+    menu.ask()
+
+def how():
+    print("I'm quite fine, thank you :)")
+    menu.ask()
+
+def exit():
+    print("Good Bye folks !")
+    quit()
+
+menu.add_boxes([
+    "\nChoose an option:\n",
+    (1, "hello !", hello),
+    (2, "how are you ?", how),
+    ("x", "exit", exit),
+])
+
+menu.ask()
+
+
 ```
 
 yes, that simple.
