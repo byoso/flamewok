@@ -18,6 +18,8 @@ my_form = Form([
     ("name", "what is your name ?"),
     ("age", "how old are you ?"),
     ])
+    
+response = my_form.ask()    
 ```
 ## Create menus : 
 ```python
@@ -51,7 +53,7 @@ menu.ask()
 
 yes, that simple.
 
-check the exemples to get an idea.
+check the examples to get a better idea of what you can do.
 
 
 
