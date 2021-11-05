@@ -1,0 +1,40 @@
+                        USING THE FORM CLASS
+
+START WITH FORMS
+
+first, import the Form class:
+from flamewok import Form
+
+create a form:
+form = Form([
+        < some tuples >,
+        ...    
+    ])
+
+the tuples must be constructed like this:
+(str(the attribute used to gather the data), str(a text to display before the prompt))
+
+
+display the form and gather datas:
+response = form.ask()
+
+The response obtained is an object Response, that have the attributes set in the tuples given at the form creation.
+The data gathered is now accessible doing:
+my_data = response.attribute
+
+(Basic python tip: you can convert it to a dict doing: my_dictionnary = response.__dict__)
+
+
+MANIPULATING A FORM
+
+A Form have fields (class Field) stored in the list Form.fields, it can then be used as any list, to 
+insert/remove/append/etc... some Fields objects in it.
+
+
+FIELDS
+
+The class Field can be imported: from flamewok import Field
+
+create a Field:
+field = Field(str(name), str(label))
+

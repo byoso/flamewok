@@ -28,6 +28,7 @@ class Response:
     """Single empty class used for the Form response"""
     pass
 
+
 class Form:
     """Give a list of fields
     fields are tuples made of 2 elements:
