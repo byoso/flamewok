@@ -36,5 +36,31 @@ FIELDS
 The class Field can be imported: from flamewok import Field
 
 create a Field:
-field = Field(str(name), str(label))
+field = Field(str(name), str(label), validator, message)
+
+name : the name is the only argument absolutely required, it will be the attribute of the 
+response you'll get from Form.ask().
+ex: field('toto')
+    response = form.ask()
+    response.toto
+
+label: text displayed before the prompt
+
+validator: see 'VALIDATORS'
+
+message: custom message to display if the validator returns Flase
+
+
+VALIDATORS
+
+A validator is any lambda function that returns a boolean (see example7).
+Flamewok provides a prebuilt helper for validation : check_type
+
+check_type(value, type): returns a boolean
+
+a validator could be for example:
+    lambda x: check_type(x, int)
+
+Note: the real type of an input is always a str, check_type is just
+    checking if the value COULD be a certain type if it were not an str.
 
