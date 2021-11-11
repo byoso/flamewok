@@ -53,7 +53,8 @@ message: custom message to display if the validator returns Flase
 
 VALIDATORS
 
-A validator is any lambda function that returns a boolean (see example7).
+A validator is any function that returns a boolean (see example7), 
+and takes one and only argument (it will be provided by the user's entry).
 Flamewok provides a prebuilt helper for validation : check_type
 
 check_type(value, type): returns a boolean
@@ -63,4 +64,5 @@ a validator could be for example:
 
 Note: the real type of an input is always a str, check_type is just
     checking if the value COULD be a certain type if it were not an str.
+    For the same reason, 'isinstance()' can't be of any help here.
 

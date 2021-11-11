@@ -10,6 +10,8 @@ from flamewok import Form, Menu
 from flamewok import check_type  # check_type is itself a validator
 
 
+
+
 ########################### MOCK ####################################
 # don't care about this part, it is just to populate the app with some
 # datas.
@@ -37,20 +39,30 @@ menu_list = Menu()  # so we have 2 menus
 def war_validator(entry):
     return check_type(entry, int) and int(entry) > 0
 
-# validator must be used in lambda functions in the fields
+
+# validator must take one and only parameter: the user's input.
+# let's see different ways to use it here
 warrior_form = Form([
-    # a validator can also be the lambda itself:
+
+    # a validator can be a non instanced lambda:
     ("name", "Warrior's name ?", lambda x: len(x) > 0,
-        # this gives a custom message for an invalid entry:
+        # this is a custom message displayed if the enrty is not valid:
         "A warrior needs a real name !"),
+
     ("str", "Strength",
         lambda entry: check_type(entry, int) and int(entry) > 0),
-    # the custom validator is called here:
-    ("dex", "Dexterity", lambda entry: war_validator(entry)),
+
+    # the custom validator can be set alone, with no parameters:
+    ("dex", "Dexterity", war_validator),
+
     ("hp", "max health (can be negative)",
-    # here is used the flamewok.validators.check_type validator alone:
+        # here is used the flamewok.validators.check_type alone,
+        # it needs to be shelled in a lambda, because is second parameter
+        # will not be provided later by the user:
         lambda entry: check_type(entry, int))
-])
+    # custom error message for all the form, a field error_message
+    # overloads a form error_message:
+], error_message="Warrior Error ! Do Better !")
 
 
 class Main:

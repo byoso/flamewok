@@ -14,12 +14,12 @@ class Field:
     """
     def __init__(
         self, name=None, label="", validator=None,
-            message=settings.DEFAULT_FIELD_ERROR):
+            error_message=None):
         if name:
             self.name = name
             self.label = label
             self.validator = validator
-            self.message = message
+            self.message = error_message
         else:
             raise NoNameError
 
@@ -41,7 +41,9 @@ class Form:
     - str(the key to register the answer)
     - str(the text to display)
     """
-    def __init__(self, fields: tuple, prompt=settings.DEFAULT_FORM_PROMPT):
+    def __init__(self, fields: tuple, prompt=settings.DEFAULT_FORM_PROMPT,
+                 error_message=settings.DEFAULT_FIELD_ERROR):
+        self.message = error_message
         self.prompt = prompt
         self.fields = []
         for field in fields:
@@ -51,6 +53,10 @@ class Form:
     def ask(self):
         response = Response()
         for field in self.fields:
+            if field.message:
+                message = field.message
+            else:
+                message = self.message
             checked = False
             while not checked:
                 print(f"{field.label}")
@@ -58,7 +64,7 @@ class Form:
                 if field.validator is not None:
                     checked = field.validator(value)
                     if not checked:
-                        print(field.message)
+                        print(message)
                 else:
                     checked = True
             setattr(response, field.name, value)
