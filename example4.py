@@ -1,13 +1,14 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-from flamewok import Menu, TextBox
-from flamewok.menu import ActionBox
-
 
 """Let's play a bit with dynamic construction of the menu.
 Do you really need that ? I do not, but it is possible.
 """
+
+from flamewok import Menu, TextBox
+from flamewok.menu import ActionBox
+
 
 menu = Menu()
 

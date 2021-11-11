@@ -1,10 +1,11 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-from flamewok import Menu
-
 
 """This is the simpliest example of what can be done with flamewok.Menu"""
+
+
+from flamewok import Menu
 
 
 menu = Menu()

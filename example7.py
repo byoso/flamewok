@@ -2,11 +2,12 @@
 # coding: utf-8
 
 
-"""An example with a small app, you will see that the menus / forms
-part is very quick to handle"""
-
+"""In this example we'll do the same as in example6, but this time
+with validators in the fields to check the validity of the entry.
+validators can be any function that returns a booléan"""
 
 from flamewok import Form, Menu
+from flamewok import check_type  # check_type is itself a validator
 
 
 ########################### MOCK ####################################
@@ -30,11 +31,25 @@ for data in datas_for_mock:
 
 menu = Menu()
 menu_list = Menu()  # so we have 2 menus
+
+
+# this is a custom validator as a function:
+def war_validator(entry):
+    return check_type(entry, int) and int(entry) > 0
+
+# validator must be used in lambda functions in the fields
 warrior_form = Form([
-    ("name", "Warrior's name ?"),
-    ("str", "Strength"),
-    ("dex", "Dexterity"),
-    ("hp", "max health")
+    # a validator can also be the lambda itself:
+    ("name", "Warrior's name ?", lambda x: len(x) > 0,
+        # this gives a custom message for an invalid entry:
+        "A warrior needs a real name !"),
+    ("str", "Strength",
+        lambda entry: check_type(entry, int) and int(entry) > 0),
+    # the custom validator is called here:
+    ("dex", "Dexterity", lambda entry: war_validator(entry)),
+    ("hp", "max health (can be negative)",
+    # here is used the flamewok.validators.check_type validator alone:
+        lambda entry: check_type(entry, int))
 ])
 
 

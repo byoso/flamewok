@@ -1,10 +1,12 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-from flamewok import Form, Field
-
 
 """Let's see how to dynamically change the form"""
+
+
+from flamewok import Form, Field
+
 
 form = Form([
     ("name", "what is your name ?"),

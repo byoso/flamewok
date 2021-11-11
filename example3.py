@@ -1,11 +1,12 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-from flamewok import Menu
-
 
 """This showes a more convenient way to work with menus when a project
 gets bigger. (does the same as example1)"""
+
+
+from flamewok import Menu
 
 
 menu = Menu()

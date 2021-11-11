@@ -13,6 +13,7 @@ Field
 
 from flamewok.menu import Menu, TextBox, ActionBox
 from flamewok.form import Form, Field
+from flamewok.validators import check_type
 
 
 if __name__ == "__main__":
@@ -21,3 +22,4 @@ if __name__ == "__main__":
     help(ActionBox)
     help(Form)
     help(Field)
+    help(check_type)

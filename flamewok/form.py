@@ -9,11 +9,17 @@ class NoNameError(Exception):
 
 
 class Field:
-    """a Form needs some Field"""
-    def __init__(self, name=None, label=""):
+    """a Form needs some Field objects
+    only 'name' is a necessary argument.
+    """
+    def __init__(
+        self, name=None, label="", validator=None,
+            message=settings.DEFAULT_FIELD_ERROR):
         if name:
             self.name = name
             self.label = label
+            self.validator = validator
+            self.message = message
         else:
             raise NoNameError
 
@@ -35,17 +41,25 @@ class Form:
     - str(the key to register the answer)
     - str(the text to display)
     """
-    def __init__(self, fields, prompt=settings.DEFAULT_FORM_PROMPT):
+    def __init__(self, fields: tuple, prompt=settings.DEFAULT_FORM_PROMPT):
         self.prompt = prompt
         self.fields = []
-        for el in fields:
-            field = Field(el[0], el[1])
-            self.fields.append(field)
+        for field in fields:
+            new_field = Field(*field)
+            self.fields.append(new_field)
 
     def ask(self):
         response = Response()
         for field in self.fields:
-            print(f"{field.label}")
-            value = input(self.prompt)
+            checked = False
+            while not checked:
+                print(f"{field.label}")
+                value = input(self.prompt)
+                if field.validator is not None:
+                    checked = field.validator(value)
+                    if not checked:
+                        print(field.message)
+                else:
+                    checked = True
             setattr(response, field.name, value)
         return response

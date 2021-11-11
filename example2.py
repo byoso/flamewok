@@ -1,10 +1,11 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
+"""This is the simpliest example of flamewok.Form"""
+
+
 from flamewok import Form
 
-
-"""This is the simpliest example of flamewok.Form"""
 
 some_form = Form([
     ("name", "what is your name ?"),
