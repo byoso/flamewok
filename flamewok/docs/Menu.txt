@@ -27,7 +27,7 @@ When creating a menu (menu=Menu(parameters)), it is possible to pass parameters 
 parameters are:
 
 inside_sep=": ",
-sep=" | ,
+sep=" | ",
 box_size=20,
 line_length=80,
 prompt="?> ",
@@ -37,7 +37,7 @@ error_message="\n!! Wrong entry, you must enter a valid choice !!",
 MANIPULATING AN AXISTING MENU
 The Menu class comes with a few public methods and attributes that allows to manipulate a menu:
 
-Menu.boxes: the list where the menu items (see ActionBox and TextBox) are stocked, you can manipulate it as
+Menu.boxes: the list where the menu items (see ActionBox and TextBox) are stored, you can manipulate it as
 any python list. It is the more convenient way to manipulate the menu, with the boxes class (see BOXES).
 
 Menu.ask(): shows the menu to the user, and a prompt to get the user's choice.
@@ -52,7 +52,7 @@ instead of adding the new ones.
 
 BOXES
 There are 2 classes of boxes: ActionBox (for the actionable items) and TextBox (for simply some text in your menu).
-you can create a box directly from their class, and then insert them into a Menu.boxes (wich is a list).
+you can create a box directly from their class, and then insert them into the Menu.boxes (wich is a list).
 
 ActionBox(choice, label, function)
 
