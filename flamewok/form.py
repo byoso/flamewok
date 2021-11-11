@@ -40,6 +40,9 @@ class Form:
     fields are tuples made of 2 elements:
     - str(the key to register the answer)
     - str(the text to display)
+    Optional key words :
+    - prompt: str
+    - error_message: str
     """
     def __init__(self, fields: tuple, prompt=settings.DEFAULT_FORM_PROMPT,
                  error_message=settings.DEFAULT_FIELD_ERROR):

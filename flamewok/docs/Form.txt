@@ -9,7 +9,7 @@ create a form:
 form = Form([
         < some tuples >,
         ...    
-    ])
+    ], error_message=<str>)
 
 the tuples must be constructed like this:
 (str(the attribute used to gather the data), str(a text to display before the prompt))
@@ -36,7 +36,7 @@ FIELDS
 The class Field can be imported: from flamewok import Field
 
 create a Field:
-field = Field(str(name), str(label), validator, message)
+field = Field(str(name), str(label), validator, error_message)
 
 name : the name is the only argument absolutely required, it will be the attribute of the 
 response you'll get from Form.ask().
@@ -48,7 +48,7 @@ label: text displayed before the prompt
 
 validator: see 'VALIDATORS'
 
-message: custom message to display if the validator returns Flase
+error_message: custom message to display if the validator returns Flase
 
 
 VALIDATORS
