@@ -4,3 +4,4 @@ build/
 dist/
 .eggs/
 flamewok.egg-info/
+building-package.txt

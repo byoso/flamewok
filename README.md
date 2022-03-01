@@ -1,6 +1,6 @@
 # FlameWok
 
-_Very tiny framework project to build quickly python apps running
+_Very tiny framework project to quickly build python apps running
 ONLY in terminal._
 
 The purpose of this package is to get you rid as much as possible 
@@ -9,6 +9,10 @@ the code clean.
 
 Fully functionnal now. Works great !
 
+## Installation
+```sh
+pip install flamewok
+```
 
 ## Create forms
 ```python
@@ -21,7 +25,7 @@ my_form = Form([
     
 response = my_form.ask()    
 ```
-## Create menus : 
+## Create menus
 ```python
 from flamewok import Menu
 
@@ -53,9 +57,9 @@ menu.ask()
 
 yes, that simple.
 
-check the examples to get a better idea of what you can do.
+check the exemples to get a better idea of what you can do.
 
 
 
-flamewok is available here:
+flamewok, docs and exemples are available here:
 https://github.com/byoso/flamewok
