@@ -2,7 +2,7 @@
 # coding: utf-8
 
 import pathlib
-from setuptools import setup, find_packages
+from setuptools import setup
 
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
@@ -14,7 +14,7 @@ README = (HERE / "README.md").read_text()
 setup(
     name="flamewok",
     version="1.0.2",
-    description="Python micro framework for CLI applications",
+    description="Python micro framework for terminal UI applications",
     long_description=README,
     long_description_content_type="text/markdown",
     url="https://github.com/byoso/flamewok",
@@ -26,7 +26,6 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.9",
     ],
-    # packages=[find_packages(exclude=["exemples", ".git"])],
     packages=["flamewok"],
     include_package_data=True,
     # install_requires=[],

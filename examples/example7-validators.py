@@ -7,7 +7,7 @@ with validators in the fields to check the validity of the entry.
 validators can be any function that returns a booléan"""
 
 from flamewok import Form, Menu
-from flamewok import check_type  # check_type is itself a validator
+from flamewok import check_type  # check_type is a validation helper
 
 
 

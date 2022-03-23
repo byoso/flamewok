@@ -8,12 +8,14 @@ from flamewok import Form
 create a form:
 form = Form([
         < some tuples >,
-        ...    
+        ...
     ], error_message=<str>)
 
-the tuples must be constructed like this:
-(str(the attribute used to gather the data), str(a text to display before the prompt))
-
+The tuples must be constructed like this:
+(str(the attribute used to gather the data), str(a text to display before the prompt), validator (optional), error_message(optional)).
+validator: see VALIDATORS
+error_message (optional in a field): will overload both the form error_message and the default one.
+error_message (optional in a form): will overload the default error_message.
 
 display the form and gather datas:
 response = form.ask()
@@ -27,7 +29,7 @@ my_data = response.attribute
 
 MANIPULATING A FORM
 
-A Form have fields (class Field) stored in the list Form.fields, it can then be used as any list, to 
+A Form have fields (class Field) stored in the list Form.fields, it can then be used as any list, to
 insert/remove/append/etc... some Fields objects in it.
 
 
@@ -38,7 +40,7 @@ The class Field can be imported: from flamewok import Field
 create a Field:
 field = Field(str(name), str(label), validator, error_message)
 
-name : the name is the only argument absolutely required, it will be the attribute of the 
+name : the name is the only argument absolutely required, it will be the attribute of the
 response you'll get from Form.ask().
 ex: field('toto')
     response = form.ask()
@@ -48,12 +50,13 @@ label: text displayed before the prompt
 
 validator: see 'VALIDATORS'
 
-error_message: custom message to display if the validator returns Flase
+error_message: custom message to display if the validator returns Flase, it overloads
+both the default error_message and a form error_message.
 
 
 VALIDATORS
 
-A validator is any function that returns a boolean (see example7), 
+A validator is any function that returns a boolean (see example7),
 and takes one and only argument (it will be provided by the user's entry).
 Flamewok provides a prebuilt helper for validation : check_type
 
@@ -63,6 +66,5 @@ a validator could be for example:
     lambda x: check_type(x, int)
 
 Note: the real type of an input is always a str, check_type is just
-    checking if the value COULD be a certain type if it were not an str.
+    checking if the value COULD be converted into the given type.
     For the same reason, 'isinstance()' can't be of any help here.
-

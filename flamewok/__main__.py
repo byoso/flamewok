@@ -8,7 +8,6 @@ Form
 Field
 """
 
-
 from flamewok.menu import Menu, TextBox, ActionBox
 from flamewok.form import Form, Field
 from flamewok.validators import check_type
