@@ -24,7 +24,10 @@ setup(
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.9",
+        "Development Status :: 5 - Production/Stable",
+        "License :: OSI Approved :: MIT License",
+        "Natural Language :: English",
+        "Topic :: Software Development :: Libraries :: Application Frameworks",
     ],
     packages=["flamewok"],
     include_package_data=True,
