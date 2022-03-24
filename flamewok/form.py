@@ -32,6 +32,7 @@ class Field:
 
 class Response:
     """Single empty class used for the Form response"""
+    # TODO: __str__ method
     pass
 
 

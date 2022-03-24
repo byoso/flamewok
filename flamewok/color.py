@@ -50,6 +50,7 @@ class Color:
             f"{str(self.background)};"
             f"{str(self.foreground)}")
         self.mark = f"\x1b[{self.ref}m"
+        self.end = "\x1b[0m"
 
     def __str__(self):
         return f"{self.mark} {self.ref} {end}"

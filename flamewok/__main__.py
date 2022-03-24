@@ -11,6 +11,7 @@ Field
 from flamewok.menu import Menu, TextBox, ActionBox
 from flamewok.form import Form, Field
 from flamewok.validators import check_type
+from flamewok.helpers import clear
 
 
 if __name__ == "__main__":
