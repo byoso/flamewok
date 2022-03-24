@@ -12,6 +12,3 @@ from flamewok.menu import Menu, TextBox, ActionBox
 from flamewok.form import Form, Field
 from flamewok.validators import check_type
 from flamewok.helpers import clear
-
-# Version of the flamewok package
-__version__ = "1.0.3"
