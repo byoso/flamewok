@@ -18,7 +18,7 @@ or execute the module in a terminal:
 ex: import color as c
 
     title = c.Color(1, 45 ,37)
-    print(f"{title.mark}A title{c.end}")
+    print(f"{title.mark}A title{title.end}")
 
 a few marks are ready to use in this module:
 
