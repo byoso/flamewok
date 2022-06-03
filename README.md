@@ -3,11 +3,9 @@
 _Very tiny framework project to quickly build python apps running
 ONLY in terminal._
 
-The purpose of this package is to get you rid as much as possible 
-of the tedious part of creating menus and forms, and help to keep
-the code clean.
+The purpose of this package is to get you rid as much as possible
+of the tedious part of creating menus, forms, and CLI, and to help to keep the code clean.
 
-Fully functionnal now. Works great !
 
 ## Installation
 ```sh
@@ -22,8 +20,8 @@ my_form = Form([
     ("name", "what is your name ?"),
     ("age", "how old are you ?"),
     ])
-    
-response = my_form.ask()    
+
+response = my_form.ask()
 ```
 ## Create menus
 ```python
@@ -55,9 +53,44 @@ menu.ask()
 
 ```
 
-yes, that simple.
+yes, that simple !
 
-check the exemples to get a better idea of what you can do.
+## Create very quickly a CLI
+
+```python
+from flamewok.cli import cli
+
+
+def main():
+    print("main program lanched")
+
+
+def see(*args):
+    """the types are defined in the cli.route"""
+    for arg in args:
+        print(type(arg), arg)
+
+def multi(*args):
+    """the types are not defined in the cli.route, so the args are all str"""
+    numbers = [float(arg) for arg in args]
+    result = 1
+    for num in numbers:
+        result *= num
+    print(result)
+
+
+if __name__ == "__main__":
+    cli.route(
+        "This is a CLI test\n", # this will appear in the help
+        ("", main, "Launches the main programm"),
+        ("-h", cli.help, "displays this help"),
+        ("--help", cli.help, 'Idem'),
+        ("see <int:a> <bool:> <str:> <float:>", see, "Show the arguments given in the CLI"),
+        ("multi <some_numbers>", multi, "multiply the numbers"),
+    )
+```
+
+check the [wiki](https://github.com/byoso/flamewok/wiki) to get a better idea of what you can do.
 
 
 

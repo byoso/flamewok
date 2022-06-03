@@ -31,9 +31,6 @@ danger = Color(1, 41, 33).mark
 
 """
 
-# this mark will be user often
-end = "\x1b[0m"
-
 
 class Color:
     """Color object, it requires 3 parameters (int):
@@ -41,7 +38,7 @@ class Color:
     - background: from 0 to 50
     - foreground: from 0 to 50
     """
-    def __init__(self, style, foreground, background):
+    def __init__(self, style, background, foreground,):
         self.style = style
         self.foreground = foreground
         self.background = background
@@ -74,11 +71,17 @@ def palette(style_range=(0, 8), bg_range=(30, 38), fg_range=(40, 48)):
 
 
 # Some prebuilt marks
+end = "\x1b[0m"
 
-info = Color(0, 46, 30).mark
-success = Color(0, 42, 30).mark
-warning = Color(1, 43, 30).mark
-danger = Color(1, 41, 33).mark
+info_hl = Color(0, 46, 30).mark
+success_hl = Color(0, 42, 30).mark
+warning_hl = Color(1, 43, 30).mark
+danger_hl = Color(1, 41, 33).mark
+
+info = Color(0, 30, 36).mark
+success = Color(0, 30, 32).mark
+warning = Color(0, 30, 33).mark
+danger = Color(0, 30, 31).mark
 
 
 if __name__ == "__main__":
