@@ -27,7 +27,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="flamewok",
-    version=__version__,
+    version=f"{__version__}",
     description="Python micro framework for terminal UI applications",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -45,7 +45,7 @@ setup(
     ],
     packages=[
         "flamewok",
-        "flamewok.cli"
+        "flamewok.tools"
         ],
     include_package_data=True,
     # install_requires=[],
