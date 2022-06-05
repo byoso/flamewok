@@ -1,3 +1,6 @@
+#! /usr/bin/env python3
+# coding: utf-8
+
 
 import flamewok
 from flamewok.cli import cli
@@ -14,13 +17,19 @@ pypi: https://pypi.org/project/flamewok/
 """
 
 
-def cmd():
+def info():
     print(infos)
 
 
-if __name__ == "__main__":
+def cmd():
     cli.route(
-        ("", cmd, "show this help"),
-        ("-h", cmd, "show this help"),
-        ("--help", cmd, "show this help"),
+        f"Flamewok {flamewok.__version__}",
+        "",
+        ("", info, "Display informations about flamewok"),
+        ("-h", cli.help, "show this help"),
+        ("--help", cli.help, "show this help"),
     )
+
+
+if __name__ == "__main__":
+    cmd()
