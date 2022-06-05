@@ -12,11 +12,12 @@ from flamewok.menu import Menu, TextBox, ActionBox
 from flamewok.form import Form, Field
 from flamewok.validators import check_type
 from flamewok.helpers import clear
+import flamewok
 
-infos = """
+infos = f"""
 flamewok
 
-version 1.0.3
+version {flamewok.__version__}
 home page: https://github.com/byoso/flamewok
 
 """

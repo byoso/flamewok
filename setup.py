@@ -51,7 +51,7 @@ setup(
     # install_requires=[],
     entry_points={
         "console_scripts": [
-            "realpython=flamewok.__main__:main",
+            "flamewok=flamewok.cmd:cmd",
         ]
     },
     setup_requires=['wheel'],
