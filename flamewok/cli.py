@@ -26,6 +26,8 @@ note that cli.help is an auto-created help.
 
 import sys
 
+from flamewok import color as c
+
 
 class CLI_Error(Exception):
     pass
@@ -35,7 +37,7 @@ class CLI:
     def __call__(self):
         print(sys.argv)
 
-    def route(self, *args, debug=False,):
+    def route(self, *args):
         """
         CLI.route takes the place of an __init__ method,
         but is explicitly called.
@@ -43,11 +45,26 @@ class CLI:
         ("path", function)
         """
         self.routes = []
-        self.description = "| "
-        self.debug = debug
+        self.description = "| ==========    CLI options    ===========\n"
 
         for arg in args:
-            self.set_route(arg)
+            if isinstance(arg, str):
+                self.description += "* " + arg + "\n"
+
+            else:
+                if arg[0] == "":
+                    self.description += '| [No option]'
+                    if len(arg) >= 3:
+                        self.description += f' : {arg[2]}'
+                    self.description += '\n'
+
+                else:
+                    self.description += f"| {arg[0]}"
+                    if len(arg) >= 3:
+                        self.description += f' : {arg[2]}'
+                    self.description += '\n'
+
+                self.set_route(arg)
 
         command = sys.argv
         self.decode_command(command)
@@ -56,15 +73,15 @@ class CLI:
         if type(arg) == str:
             self.description += arg
         elif type(arg) == tuple:
-            path = arg[0]
+            actions = []
+            arguments = []
+            path = arg[0].strip()
             function = arg[1]
             if len(arg) >= 3:
                 help = arg[2]
             else:
                 help = None
             elems = path.strip().split(" ")
-            actions = []
-            arguments = []
             now_parameters = False
             for elem in elems:
                 if elem.startswith("<"):
@@ -79,7 +96,7 @@ class CLI:
                         arguments.append(str)
                 else:
                     if now_parameters:
-                        raise CLI_Error("actions must not be set after parameters")
+                        raise CLI_Error("actions must be set BEFORE parameters")
                     actions.append(elem)
 
             self.routes.append({
@@ -92,26 +109,42 @@ class CLI:
 
     def find_route(self, commands, routes, index=0):
         if len(commands) < index:
-            if self.debug:
-                raise CLI_Error("CLI route not found")
-            else:
-                print("Command not found")
-                exit()
+            route = self.find_only_params_route(commands)
+            return route
         if len(commands) == 0:
             routes = [route for route in routes if route['path'] == '']
             if len(routes) != 1:
-                raise CLI_Error("Bad routing")
+                print("Command not found")
+                exit()
         if len(routes) == 1:
             return routes[0]
 
         best = []
+        arg_only_route = False
         for route in routes:
+            # multiple routes with only arguments is forbiden
+            if route['path'].startswith("<"):
+                if arg_only_route:
+                    print(f"{c.warning}error: Multiple routes have only <arguments> with no action before{c.end}")
+                    exit()
+                arg_only_route = True
+
             if len(route['actions']) > index and len(commands) > index:
                 if route['actions'][index] == commands[index]:
                     best.append(route)
         index += 1
 
         return self.find_route(commands, best, index)
+
+    def find_only_params_route(self, commands):
+        """When no route 'with action' is found, try to find one with
+        only parameters expected"""
+        routes = [route for route in self.routes if route['actions'] == []]
+        if len(routes) == 1:
+            route = routes[0]
+            return route
+        print("Command not found")
+        exit()
 
     def decode_command(self, command):
         commands = command[1:]
@@ -131,9 +164,25 @@ class CLI:
         params = []
         for i in range(min):
             if route['arguments'][i] == bool:
-                params.append(route['arguments'][i](int(args[i])))
+                try:
+                    params.append(route['arguments'][i](int(args[i])))
+                except ValueError:
+                    print(
+                        f"{c.warning}Aborted !\n"
+                        "'boolean' type expected (0 or 1), "
+                        f"recieved : {args[i]}{c.end}"
+                        )
+                    exit()
             else:
-                params.append(route['arguments'][i](args[i]))
+                try:
+                    params.append(route['arguments'][i](args[i]))
+                except ValueError:
+                    print(
+                        f"{c.warning}Wrong command !\n"
+                        f"'{route['arguments'][i].__name__}' type expected, "
+                        f"recieved : {args[i]}{c.end}"
+                        )
+                    exit()
 
         if max is not None:
             params = [*params, *args[min:max]]
@@ -141,22 +190,7 @@ class CLI:
         return route['function'](*params)
 
     def help(self):
-        message = "| ===         CLI options:                ===\n"
-        message += self.description + "\n"
-        for route in self.routes:
-            if route['path'] == '':
-                message += '| == Is executable without any option'
-                if route['help'] is not None:
-                    message += " : " + route['help']
-                message += "\n"
-            else:
-                # descr = route['function'].__name__
-                message += "| " + route['path']
-                # message += " -> " + f"{descr}()"
-                if route['help'] is not None:
-                    message += " : " + route['help']
-                message += "\n"
-        print(message)
+        print(self.description)
 
 
 cli = CLI()

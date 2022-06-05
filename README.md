@@ -1,7 +1,6 @@
 # FlameWok
 
-_Very tiny framework project to quickly build python apps running
-ONLY in terminal._
+_Very tiny framework to quickly create python terminal apps._
 
 The purpose of this package is to get you rid as much as possible
 of the tedious part of creating menus, forms, and CLI, and to help to keep the code clean.
