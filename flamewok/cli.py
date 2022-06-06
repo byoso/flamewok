@@ -1,196 +1,197 @@
-"""
-This script allows to create veeeery quicly a CLI
-
-Example:
-
-if __name__ == "__main__":
-    cli.route(
-        "This is a test, to try my new CLI toy\n",
-        ("", main, "Launches the main programm"),
-        ("-h", cli.help, "displays this help"),
-        ("--help", cli.help, 'Idem'),
-        ("see <int:a> <bool:> <str:> <float:>", see, "Show the arguments given in the CLI"),
-        ("test 2", test2, "calls the test2 function"),
-        ("multi <float:a> <float:b>", multi, "calculate arg_a x arg_b"),
-        ("add <numbers>", add, "print the addition of the given numbers")
-    )
-
-Each route takes a path with or without parameters '<>', a callback
-function that revieve the parameters if there are some, and an optionnal
-description.
-
-that's all !
-note that cli.help is an auto-created help.
-"""
-
 
 import sys
 
 from flamewok import color as c
 
 
-class CLI_Error(Exception):
-    pass
+class Route:
+    def __init__(self, definition):
+        self.actions = []
+        self.expected = []
+        self.callback = definition[1]
+        self.validity = 0
+        self.is_valid = True
+
+        self.split_definition(definition[0])
+
+    def __str__(self):
+        return (
+            "<Route- "
+            f"Actions: {self.actions} "
+            f"Expected: {self.expected} "
+            f"Callback: {self.callback.__name__} "
+            f"validity: {self.is_valid}-{self.validity} "
+            ">")
+
+    def split_definition(self, elements):
+        elems = elements.strip().split(" ")
+        for elem in elems:
+            if elem.startswith("<"):
+                if elem.startswith("<int:"):
+                    self.expected.append("int")
+                elif elem.startswith("<float:"):
+                    self.expected.append("float")
+                elif elem.startswith("<bool:"):
+                    self.expected.append("bool")
+                else:
+                    self.expected.append("str")
+            else:
+                self.actions.append(elem)
+        if len(self.actions) == 0:
+            self.actions.append("")
 
 
 class CLI:
-    def __call__(self):
-        print(sys.argv)
 
-    def route(self, *args):
-        """
-        CLI.route takes the place of an __init__ method,
-        but is explicitly called.
-        args are tuples like this:
-        ("path", function)
-        """
+    def route(self, *definitions):
         self.routes = []
-        self.description = "| ==========    CLI options    ===========\n"
-
-        for arg in args:
-            if isinstance(arg, str):
-                self.description += "* " + arg + "\n"
-
-            else:
-                if arg[0] == "":
-                    self.description += '| [No option]'
-                    if len(arg) >= 3:
-                        self.description += f' : {arg[2]}'
-                    self.description += '\n'
-
-                else:
-                    self.description += f"| {arg[0]}"
-                    if len(arg) >= 3:
-                        self.description += f' : {arg[2]}'
-                    self.description += '\n'
-
-                self.set_route(arg)
-
-        command = sys.argv
-        self.decode_command(command)
-
-    def set_route(self, arg):
-        if type(arg) == str:
-            self.description += arg
-        elif type(arg) == tuple:
-            actions = []
-            arguments = []
-            path = arg[0].strip()
-            function = arg[1]
-            if len(arg) >= 3:
-                help = arg[2]
-            else:
-                help = None
-            elems = path.strip().split(" ")
-            now_parameters = False
-            for elem in elems:
-                if elem.startswith("<"):
-                    now_parameters = True
-                    if elem.startswith("<int:"):
-                        arguments.append(int)
-                    elif elem.startswith("<float:"):
-                        arguments.append(float)
-                    elif elem.startswith("<bool:"):
-                        arguments.append(bool)
-                    else:
-                        arguments.append(str)
-                else:
-                    if now_parameters:
-                        raise CLI_Error("actions must be set BEFORE parameters")
-                    actions.append(elem)
-
-            self.routes.append({
-                'path': path.strip(),
-                'actions': actions,
-                'function': function,
-                'arguments': arguments,
-                'help': help,
-                })
-
-    def find_route(self, commands, routes, index=0):
-        if len(commands) < index:
-            route = self.find_only_params_route(commands)
-            return route
-        if len(commands) == 0:
-            routes = [route for route in routes if route['path'] == '']
-            if len(routes) != 1:
-                print("Command not found")
-                exit()
-        if len(routes) == 1:
-            return routes[0]
-
-        best = []
-        arg_only_route = False
-        for route in routes:
-            # multiple routes with only arguments is forbiden
-            if route['path'].startswith("<"):
-                if arg_only_route:
-                    print(f"{c.warning}error: Multiple routes have only <arguments> with no action before{c.end}")
-                    exit()
-                arg_only_route = True
-
-            if len(route['actions']) > index and len(commands) > index:
-                if route['actions'][index] == commands[index]:
-                    best.append(route)
-        index += 1
-
-        return self.find_route(commands, best, index)
-
-    def find_only_params_route(self, commands):
-        """When no route 'with action' is found, try to find one with
-        only parameters expected"""
-        routes = [route for route in self.routes if route['actions'] == []]
-        if len(routes) == 1:
-            route = routes[0]
-            return route
-        print("Command not found")
-        exit()
-
-    def decode_command(self, command):
-        commands = command[1:]
-        routes = self.routes[:]
-
-        route = self.find_route(commands, routes)
-
-        index = len(route['actions'])
-        args = commands[index:]
-        if len(args) <= len(route['arguments']):
-            min = len(args)
-            max = None
+        self.help_content = "| ==========    CLI options    ===========\n"
+        for definition in definitions:
+            self.build_help_content(definition)
+            self.build_routes(definition)
+        if len(sys.argv) == 1:
+            self.commands = [""]
         else:
-            min = len(route['arguments'])
-            max = len(args)
+            self.commands = sys.argv[1:]
+        self.find_route()
 
-        params = []
-        for i in range(min):
-            if route['arguments'][i] == bool:
-                try:
-                    params.append(route['arguments'][i](int(args[i])))
-                except ValueError:
-                    print(
-                        f"{c.warning}Aborted !\n"
-                        "'boolean' type expected (0 or 1), "
-                        f"recieved : {args[i]}{c.end}"
-                        )
-                    exit()
+    def build_help_content(self, definition):
+        if type(definition) == str:
+            self.help_content += f"* {definition}"
+        else:
+            if definition[0] == "":
+                self.help_content += "| [no option]"
             else:
-                try:
-                    params.append(route['arguments'][i](args[i]))
-                except ValueError:
-                    print(
-                        f"{c.warning}Wrong command !\n"
-                        f"'{route['arguments'][i].__name__}' type expected, "
-                        f"recieved : {args[i]}{c.end}"
-                        )
-                    exit()
+                self.help_content += f"| {definition[0]}"
+            if len(definition) > 2:
+                self.help_content += f" : {definition[2]}"
+        self.help_content += "\n"
 
-        if max is not None:
-            params = [*params, *args[min:max]]
-
-        return route['function'](*params)
+    def build_routes(self, definition):
+        if type(definition) != str:
+            route = Route(definition)
+            self.routes.append(route)
 
     def help(self):
-        print(self.description)
+        print(self.help_content)
+
+    def find_route(self):
+        possibles = []
+        for route in self.routes:
+            possibles.append(self.valid_route(route))
+        possibles = [possible for possible in possibles if possible.is_valid]
+        if len(possibles) >= 1:
+            self.compare_validity_scores(possibles)
+        else:
+            only_args = [route for route in self.routes if route.actions[0] == "" and len(route.expected) > 0]
+            if len(only_args) == 1:
+                self.execute_route(only_args[0])
+            else:
+                print(f"{c.warning}Command not found{c.end}")
+                exit()
+
+    def valid_route(self, route):
+        len_actions = len(route.actions)
+        len_command = len(self.commands)
+        if len_actions > len_command:
+            route.is_valid = False
+        else:
+            index = 0
+            route.validity += 1
+            for action in route.actions:
+                if route.is_valid:
+                    if action != self.commands[index]:
+                        route.is_valid = False
+                    route.validity += 1
+                index += 1
+
+        return route
+
+    def sort_scores(self, routes):
+        """Keep only the routes with the best score"""
+        routes = sorted(routes, key=lambda x: x.validity, reverse=True)
+        max_validity = routes[0].validity
+        routes = [possible for possible in routes if possible.validity == max_validity]
+        return routes
+
+    def compare_validity_scores(self, possibles):
+        possibles = self.sort_scores(possibles)
+        if len(possibles) > 1:
+            for route in possibles:
+                if len(self.commands) == len(route.actions) and \
+                        len(route.expected) == 0:
+                    route.validity += 1
+                if len(self.commands) > len(route.actions) and \
+                        len(route.expected) > 0:
+                    route.validity += 1
+
+            possibles = self.sort_scores(possibles)
+            if len(possibles) > 1:
+                if possibles[0].validity == possibles[1].validity:
+                    print(f"{c.warning}CLI route conflict !{c.end}")
+                    exit()
+        self.execute_route(possibles[0])
+
+    def convert_arguments(self, route, arguments):
+        # print(route.expected, arguments)
+        converted = []
+        if len(route.expected) > len(arguments):
+            index = len(arguments)
+        else:
+            index = len(route.expected)
+        if index == 0:
+            return arguments
+
+        for i in range(index):
+            if route.expected[i] == "int":
+                try:
+                    converted.append(int(arguments[i]))
+                except ValueError:
+                    print(f"{c.warning}Aborted !{c.end}")
+                    print(
+                        f"{c.warning}Expected 'int' type,"
+                        f" received: {arguments[i]}{c.end}")
+                    exit()
+
+            if route.expected[i] == "float":
+                try:
+                    converted.append(float(arguments[i]))
+                except ValueError:
+                    print(f"{c.warning}Aborted !{c.end}")
+                    print(
+                        f"{c.warning}Expected 'float' type,"
+                        f" received: {arguments[i]}{c.end}")
+                    exit()
+            if route.expected[i] == "bool":
+                try:
+                    converted.append(bool(int(arguments[i])))
+                except ValueError:
+                    print(f"{c.warning}Aborted !{c.end}")
+                    print(
+                        f"{c.warning}Expected 'bool' type (0 or 1),"
+                        f" received: {arguments[i]}{c.end}")
+                    exit()
+            if route.expected[i] == "str":
+                converted.append(arguments[i])
+
+        if len(route.expected) < len(arguments):
+            converted = [*converted, *arguments[index:]]
+
+        return converted
+
+    def execute_route(self, route):
+        callback = route.callback
+        if route.actions[0] == "":
+            index = 0
+        else:
+            index = len(route.actions)
+        arguments = self.commands[index:]
+        # values convertions
+        if len(arguments) == 0 or arguments[0] != "":
+            arguments = self.convert_arguments(route, arguments)
+            callback(*arguments)
+        else:
+            callback()
 
 
 cli = CLI()
