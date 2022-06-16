@@ -2,7 +2,6 @@
 # coding: utf-8
 
 """
-This file only belongs to pypi setup, not with silly_db in itself.
 REMINDER:
 1- build
 ./setup.py sdist bdist_wheel
