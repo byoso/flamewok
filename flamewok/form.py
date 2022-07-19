@@ -31,9 +31,19 @@ class Field:
 
 
 class Response:
-    """Single empty class used for the Form response"""
-    # TODO: __str__ method
-    pass
+    """Simple empty class used for the Form response"""
+    def __str__(self):
+        if len(vars(self)) == 0:
+            return "<Response: Empty response>"
+        message = "<Response:"
+        for var in vars(self):
+            var_type = str(type(getattr(self, var)))
+            value = str(getattr(self, var))
+            message += (
+                f"\n- {var:<30}: ({var_type:<12}) {value:<30}"
+                )
+        message += "\n>"
+        return message
 
 
 class Form:

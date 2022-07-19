@@ -6,3 +6,5 @@ dist/
 flamewok.egg-info/
 building-package.txt
 .env/
+tests/
+main.py
