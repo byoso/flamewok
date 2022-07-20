@@ -83,9 +83,9 @@ class CLI:
         if len(possibles) >= 1:
             self.compare_validity_scores(possibles)
         else:
-            only_args = [route for route in self.routes if route.actions[0] == "" and len(route.expected) > 0]
-            if len(only_args) == 1:
-                self.execute_route(only_args[0])
+            only_arg = [route for route in self.routes if route.actions[0] == "" and len(route.expected) > 0]
+            if len(only_arg) == 1:
+                self.execute_route(only_arg[0])
             else:
                 print(f"{c.warning}Command not found{c.end}")
                 exit()

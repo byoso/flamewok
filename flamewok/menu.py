@@ -1,4 +1,3 @@
-from uuid import uuid4
 from abc import ABC
 
 from flamewok import settings
@@ -8,7 +7,6 @@ class Box(ABC):
     """Box classes must inherit from this"""
     def __init__(self, label=""):
         self.label = label
-        self.id = str(uuid4())
 
     def __str__(self):
         return f"<Box| {self.label}>"
@@ -19,8 +17,6 @@ class Box(ABC):
 
 class ActionBox(Box):
     """An ActionBox is an activable element of the menu"""
-    choices = []
-
     def __init__(self, choice="", label="", func=None):
         super().__init__(label)
         self.choice = str(choice)
