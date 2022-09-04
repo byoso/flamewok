@@ -45,10 +45,13 @@ class CLI:
 
     def route(self, *definitions):
         self.routes = []
-        self.help_content = "| ==========    CLI options    ===========\n"
+        self.help_content = (
+            "| =============================    CLI options"
+            "    =============================\n"
+            )
         for definition in definitions:
-            self.build_help_content(definition)
-            self.build_routes(definition)
+                self.build_help_content(definition)
+                self.build_routes(definition)
         if len(sys.argv) == 1:
             self.commands = [""]
         else:
@@ -56,21 +59,37 @@ class CLI:
         self.find_route()
 
     def build_help_content(self, definition):
-        if type(definition) == str:
-            self.help_content += f"* {definition}"
-        else:
-            if definition[0] == "":
-                self.help_content += "| [no option]"
+        if not isinstance(definition, str):
+            if isinstance(
+                definition[0], list) or isinstance(
+                    definition[0], tuple):
+                self.help_content += "|"
+                for i in definition[0]:
+                    if i == "" or i == " ":
+                        self.help_content += "[no option] |"
+                    else:
+                        self.help_content += f" [{i}] |"
+                self.help_content = self.help_content[:-1]
             else:
-                self.help_content += f"| {definition[0]}"
+                if definition[0] == "":
+                    self.help_content += "| [no option]"
+                else:
+                    self.help_content += f"| {definition[0]}"
             if len(definition) > 2:
                 self.help_content += f" : {definition[2]}"
+        else:  # definition is str
+            self.help_content += f"* {definition}"
         self.help_content += "\n"
 
     def build_routes(self, definition):
         if type(definition) != str:
-            route = Route(definition)
-            self.routes.append(route)
+            if isinstance(definition[0], list) or isinstance(definition[0], tuple):
+                for i in definition[0]:
+                    route = Route((i, definition[1:2][0], definition[2:3][0]))
+                    self.routes.append(route)
+            else:
+                route = Route(definition)
+                self.routes.append(route)
 
     def help(self):
         print(self.help_content)
@@ -87,7 +106,7 @@ class CLI:
             if len(only_arg) == 1:
                 self.execute_route(only_arg[0])
             else:
-                print(f"{c.warning}Command not found{c.end}")
+                print("Command not found")
                 exit()
 
     def valid_route(self, route):
@@ -133,7 +152,6 @@ class CLI:
         self.execute_route(possibles[0])
 
     def convert_arguments(self, route, arguments):
-        # print(route.expected, arguments)
         converted = []
         if len(route.expected) > len(arguments):
             index = len(arguments)

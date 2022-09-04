@@ -8,3 +8,4 @@ building-package.txt
 .env/
 .coverage
 main.py
+main_example.py

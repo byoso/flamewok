@@ -13,4 +13,4 @@ from flamewok.form import Form, Field
 from flamewok.validators import check_type
 from flamewok.helpers import clear
 
-__version__ = "1.0.8"
+__version__ = "1.1.0"
