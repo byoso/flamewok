@@ -88,6 +88,40 @@ if __name__ == "__main__":
         ("multi <some_numbers>", multi, "multiply the numbers"),
     )
 ```
+## Fancy titles
+```python
+from flamewok import big_text
+from flamewok import color as c
+
+print(big_text(
+        "Example", on="@", off=".", spacing=2, underline=True, color=c.success))
+
+# Output (the color can only be seen in a real terminal):
+@@@@@...............................@@...........
+@....................................@...........
+@......@...@...@@@...@@.@...@@@@.....@.....@@@...
+@@@@....@.@.......@..@.@.@..@...@....@....@...@..
+@........@.....@@@@..@.@.@..@...@....@....@@@@@..
+@.......@.@...@...@..@.@.@..@@@@.....@....@......
+@@@@@..@...@...@@@@..@.@.@..@.......@@@....@@@...
+.................................................
+.................................................
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# or with default settings:
+
+print(big_text("Example"))
+
+# Output:
+#####                          ##
+#                               #
+#     #   #  ###  ## #  ####    #    ###
+####   # #      # # # # #   #   #   #   #
+#       #    #### # # # #   #   #   #####
+#      # #  #   # # # # ####    #   #
+##### #   #  #### # # # #      ###   ###
+
+```
+
 
 check the [wiki](https://github.com/byoso/flamewok/wiki) to get a better idea of what you can do.
 

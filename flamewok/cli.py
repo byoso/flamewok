@@ -47,11 +47,11 @@ class CLI:
         self.routes = []
         self.help_content = (
             "| =============================    CLI options"
-            "    =============================\n"
+            "     =============================\n"
             )
         for definition in definitions:
-                self.build_help_content(definition)
-                self.build_routes(definition)
+            self.build_help_content(definition)
+            self.build_routes(definition)
         if len(sys.argv) == 1:
             self.commands = [""]
         else:

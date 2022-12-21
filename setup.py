@@ -44,7 +44,8 @@ setup(
     ],
     packages=[
         "flamewok",
-        "flamewok.tools"
+        "flamewok.tools",
+        "flamewok.text",
         ],
     include_package_data=True,
     # install_requires=[],

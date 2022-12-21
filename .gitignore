@@ -6,6 +6,7 @@ dist/
 flamewok.egg-info/
 building-package.txt
 .env/
+venv/
 .coverage
 main.py
 main_example.py
